@@ -8,10 +8,11 @@ const NavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 const url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8PigS4RmZkbZy78zpZoSuOw&s"
 const logo='https://img.freepik.com/free-vector/bird-colorful-gradient-design-vector_343694-2506.jpg'
   useEffect(() => {
-    const token = localStorage.getItem('token');
+   
     if (token) {
         setUser(true)
     }
@@ -44,10 +45,10 @@ const logo='https://img.freepik.com/free-vector/bird-colorful-gradient-design-ve
 
   const handleLogout = async () => {
     try {
-      const response = await deleteProfile();
+      const response = await deleteProfile(token);
       if (response && response.status === 200) {
         localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        // localStorage.removeItem('user');
         setUser(null);
         navigate('/login');
       }
@@ -107,7 +108,7 @@ const logo='https://img.freepik.com/free-vector/bird-colorful-gradient-design-ve
             </>
           ) : (
             <Link to="/login" className="hover:text-gray-300 transition duration-300">
-              Sign In/Login
+              Login
             </Link>
           )}
         </div>
@@ -155,7 +156,7 @@ const logo='https://img.freepik.com/free-vector/bird-colorful-gradient-design-ve
             </>
           ) : (
             <Link to="/login" className="hover:text-gray-300 transition duration-300">
-              Sign In/Login
+              Login
             </Link>
           )}
         </div>

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { deleteProfile, getProfile } from "../service/api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-const url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8PigS4RmZkbZy78zpZoSuOw&s"
+  const url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8PigS4RmZkbZy78zpZoSuOw&s";
+
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -22,6 +24,7 @@ const url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8P
         setUser(response.data);
       } catch (err) {
         setError("Failed to fetch profile. Please try again.");
+        toast.error("Failed to fetch profile. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -46,40 +49,44 @@ const url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8P
     );
   }
 
-  const handleUpdate = (id) => {
+  const handleUpdate = () => {
     // Navigate to the update profile page
     navigate("/update");
   };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem("token");
+
     if (!token) {
+      toast.error("No token found, user not authenticated.");
       console.log("No token found, user not authenticated.");
       return;
     }
-  
+
     try {
       const response = await deleteProfile(token);
-      
+
       if (response.status === 200) {
-        console.log("User profile deleted successfully.");
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+        toast.success("User profile deleted successfully.");
+        localStorage.removeItem("token");
+        // window.location.href = "/login";
+        navigate('/signup')
       } else {
+        toast.error(`Error deleting user: ${response.statusText}`);
         console.error(`Error deleting user: ${response.statusText}`);
       }
     } catch (error) {
+      toast.error("Failed to delete profile: " + (error.response ? error.response.data : error.message));
       console.error("Failed to delete profile:", error.response ? error.response.data : error.message);
     }
-  };  
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div className="bg-white shadow-lg rounded-lg w-full max-w-lg p-6">
         <div className="flex flex-col items-center space-y-4">
           <img
-            src={user.photo ||url}// Fallback image
+            src={user.photo || url} // Fallback image
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover border-2 border-blue-500"
           />
@@ -114,6 +121,7 @@ const url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvts5aHBstDkR8P
           </button>
         </div>
       </div>
+      {/* <ToastContainer /> */}
     </div>
   );
 };

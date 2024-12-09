@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { updateProfile } from "../service/api";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ const UpdateProfile = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate= useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,10 +28,10 @@ const UpdateProfile = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await updateProfile(formData, token);
-      console.log("Profile updated:", response.data);
+      toast.success(response.data);
+    navigate('/')
     } catch (err) {
-      console.error(err);
-      setError("Error updating profile");
+      toast.error(err.response?.data || "Error updating profile");
     } finally {
       setLoading(false);
     }
@@ -38,17 +41,12 @@ const UpdateProfile = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Update Your Profile</h1>
 
-      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
-
       <form
         onSubmit={handleSubmit}
         className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8 space-y-6 border border-gray-300"
       >
         <div>
-          <label
-            htmlFor="briefDescription"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label htmlFor="briefDescription" className="block text-sm font-medium text-gray-700 mb-2">
             Brief Description
           </label>
           <textarea
@@ -63,10 +61,7 @@ const UpdateProfile = () => {
         </div>
 
         <div>
-          <label
-            htmlFor="detailedDescription"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label htmlFor="detailedDescription" className="block text-sm font-medium text-gray-700 mb-2">
             Detailed Description
           </label>
           <textarea
@@ -81,10 +76,7 @@ const UpdateProfile = () => {
         </div>
 
         <div>
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
             Address
           </label>
           <input

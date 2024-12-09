@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { PostData } from "../service/api";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const Signup = () => {
     photo: null,
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const navigate= useNavigate()
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -24,7 +25,6 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     const form = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -32,14 +32,16 @@ const Signup = () => {
     });
 
     try {
-    //   const response = await axios.post("/register", form, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   });
-    const response= await PostData(form)
-    console.log('response signup', response)
-      setMessage("Registration successful!");
+      const response = await PostData(form);
+      if(response.status===201){
+        toast.success(response.data);
+        navigate('/login')
+      }
     } catch (error) {
-      setMessage("Something went wrong. Please try again.");
+      const errorMessage = error.response
+        ? error.response.data
+        : "Something went wrong. Please try again.";
+      toast.error(`Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -97,17 +99,6 @@ const Signup = () => {
             {loading ? "Submitting..." : "Sign Up"}
           </button>
         </form>
-        {message && (
-          <div
-            className={`mt-4 text-center text-sm ${
-              message.includes("successful")
-                ? "text-green-500"
-                : "text-red-500"
-            }`}
-          >
-            {message}
-          </div>
-        )}
       </div>
     </div>
   );

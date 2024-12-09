@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { UpdateBlogPost } from "../service/api";
+import { toast, ToastContainer } from "react-toastify";
 
 const UpdateBlog = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState({
     title: "",
     description: "",
   });
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);  // For image preview
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState(null);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +23,6 @@ const UpdateBlog = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setImage(selectedFile);
-    // Create a preview for the selected image
     if (selectedFile) {
       const previewUrl = URL.createObjectURL(selectedFile);
       setImagePreview(previewUrl);
@@ -34,7 +32,6 @@ const UpdateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErr('');
 
     const formData = new FormData();
     formData.append("id", id);
@@ -47,12 +44,11 @@ const UpdateBlog = () => {
     try {
       const response = await UpdateBlogPost(formData, token);
       if (response.status === 200) {
-        setErr('Blog updated successfully!');
-        navigate("/"); // Redirect after successful update
+        toast.success(response.data);
+        navigate("/");
       }
     } catch (error) {
-      console.error("Error updating blog:", error);
-      setErr('Failed to update the blog.');
+      toast.error(error.response?.data || "Failed to update the blog.");
     } finally {
       setLoading(false);
     }
@@ -110,7 +106,7 @@ const UpdateBlog = () => {
           {loading ? "Updating..." : "Update Blog"}
         </button>
       </form>
-      {err && <p className="text-red-500 mt-2">{err}</p>}
+      {/* <ToastContainer /> */}
     </div>
   );
 };
