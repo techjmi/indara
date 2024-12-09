@@ -36,9 +36,10 @@ const Blog = () => {
       const response = await deleteBlog(token, id);
       if (response.data === 200) {
         toast.success(response.data);
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        navigate('/')
+        // setTimeout(() => {
+        //   navigate('/');
+        // }, 2000);
       } else {
         toast.error(response.data || "Failed to delete the blog.");
       }

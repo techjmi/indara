@@ -60,7 +60,7 @@ export const updateProfile = async (data, token) => {
 
 // Delete user profile API - Deletes the user profile from the system
 export const deleteProfile = async (token) => {
-    console.log('the delete token', token)
+    // console.log('the delete token', token)
     try {
         const response = await axios.delete(`${url}/profile`, {
             headers: {
@@ -124,6 +124,7 @@ export const UpdateBlogPost = async (data, token) => {
 
 // Delete a blog post API - Deletes a specific blog post
 export const deleteBlog = async (token, id) => {
+    // console.log('delete id', token)
     try {
         const response = await axios.delete(`${url}/blog`, {
             headers: {
