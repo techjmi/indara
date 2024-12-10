@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { deleteProfile, getProfile } from "../service/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 const Profile = () => {
@@ -49,10 +49,10 @@ const Profile = () => {
     );
   }
 
-  const handleUpdate = () => {
-    // Navigate to the update profile page
-    navigate("/update");
-  };
+  // const handleUpdate = () => {
+  //   // Navigate to the update profile page
+  //   navigate("/update");
+  // };
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
@@ -107,12 +107,12 @@ const Profile = () => {
           </p>
         </div>
         <div className="mt-6 flex justify-between items-center">
-          <button
-            onClick={handleUpdate}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            Update Profile
-          </button>
+        <Link
+  to="/update-profile"
+  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition inline-block text-center"
+>
+  Update Profile
+</Link>
           <button
             onClick={handleDelete}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"

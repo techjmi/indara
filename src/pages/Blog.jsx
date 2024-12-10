@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { blogPost, deleteBlog } from "../service/api";
 
@@ -74,12 +74,12 @@ const Blog = () => {
             <p className="text-gray-700 mb-4">{post.description}</p>
             <p className="text-gray-600">{post.content}</p>
             <div className="mt-6 flex justify-between items-center">
-              <button
-                onClick={() => handleUpdate(post._id)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-              >
-                Update Blog
-              </button>
+            <Link
+  to={`/updateblg/${post._id}`}
+  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition inline-block text-center"
+>
+  Update Blog
+</Link>
               <button
                 onClick={() => handleDelete(post._id)}
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
